@@ -3,7 +3,10 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 // Namespaces
 use Silex\Provider\FormServiceProvider;
+use Symfony\Component\Validator\Constraints as Assert;
 
+// Some constant sql queries
+define('COUNT_QUERY', 'SELECT COUNT(*) as count FROM attendees');
 
 $app = new Silex\Application();
 
@@ -22,6 +25,18 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(),
 ));
 
 $app->register(new FormServiceProvider());
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+	'translator.domains' => array(),
+));
+
+// Form builder function
+function getRegisterForm($app) {
+	return $app['form.factory']->createBuilder()
+		->add('name', 'text', array('constraints' => array(new Assert\NotBlank())))
+		->add('email', 'text', array('constraints' => array(new Assert\Email())))
+		->getForm();
+}
 
 // This route handles the data from the form
 $app->post('/tuuppaa', function (Request $request) use($app) {
@@ -30,7 +45,13 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 
 // This route is the simple main route, just renders the form
 $app->get('/', function () use ($app) {
-    return $app['twig']->render('main.twig');
+	$res = $app['db']->fetchAssoc(COUNT_QUERY);
+	if($res['count'] >= 300) {
+		// return something or redirect etc.
+		return "No bonus";
+	}
+	//var_dump(getRegisterForm($app));
+	return $app['twig']->render('main.twig');
 });
 
 
