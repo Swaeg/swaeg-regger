@@ -7,4 +7,5 @@ $app = require_once __DIR__ ."/bootstrap/bootstrap.php";
 
 $console = $app["console"];
 $console->add(new \CsvCommand());
+$console->add(new \ResetCommand());
 $console->run();
