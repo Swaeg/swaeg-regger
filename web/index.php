@@ -2,6 +2,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 // Namespaces
+use Symfony\Component\HttpFoundation\Request;
 use Silex\Provider\FormServiceProvider;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -40,23 +41,31 @@ function getRegisterForm($app) {
 
 // This route handles the data from the form
 $app->post('/tuuppaa', function (Request $request) use($app) {
-
+	$form = getRegisterForm($app);
+	$form->handleRequest($request);
+	if ($form->isValid()) {
+		$data = $form->getData();
+		$app['db']->insert('attendees', array('name' => $data['name'], 'email' => $data['email']));
+	}
 });
 
 // This route is the simple main route, just renders the form
-$app->get('/', function () use ($app) {
+$app->get('/', function (Request $request) use ($app) {
 	$res = $app['db']->fetchAssoc(COUNT_QUERY);
 	if($res['count'] >= 300) {
 		// return something or redirect etc.
 		return "No bonus";
 	}
-	//var_dump(getRegisterForm($app));
-	return $app['twig']->render('main.twig');
+	// Fetch form
+	$form = getRegisterForm($app);
+	$form->handleRequest($request);
+
+	return $app['twig']->render('main.twig.html', array('form' => $form->createView()));
 });
 
 
 /*$app->get('/init-db', function() use($app) {
-	$sql = "CREATE TABLE IF NOT EXISTS attendees(id INT PRIMARY KEY NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL)";
+	$sql = "CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL)";
 	$app['db']->executeQuery($sql);
 	return "Init db!";
 });*/
