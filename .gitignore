@@ -1,3 +1,6 @@
 # ignore vendorsss
 
 /vendor
+
+# ignore csv-files
+*.csv

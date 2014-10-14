@@ -6,7 +6,7 @@
 
 return array(
 
-	'limit' => 1
+	'limit' => 300
 
 );
 

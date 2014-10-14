@@ -35,4 +35,5 @@ $app->register(new ConsoleServiceProvider(), array(
         'console.project_directory' => __DIR__."/..",
 ));
 
+//$app['asset_path'] = __DIR__."/../web/";
 return $app;

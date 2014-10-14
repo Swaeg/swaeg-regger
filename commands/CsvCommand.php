@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Classes\Console\Console;
+use League\Csv\Writer;
 
 class CsvCommand extends Knp\Command\Command {
 	
@@ -16,6 +16,15 @@ class CsvCommand extends Knp\Command\Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$output->writeln("It owkrs!");
+		$output->writeln("Dumping sql to csv-file");
+		$sql = "SELECT name, email FROM attendees";
+		$app = $this->getSilexApplication();
+		$users = $app['db']->fetchAll($sql);
+		$csv = Writer::createFromFileObject(new SplFileObject(__DIR__.'/../registered.csv', 'a+'), 'w');
+		$csv->setNullHandlingMode(Writer::NULL_AS_EMPTY);
+		$csv->insertOne(['name', 'email']);
+		$csv->insertAll($users);
+		//$csv->output('registered.csv');
+		$output->writeln("Sql dumped. File saved as registered.csv");
 	}	
 }

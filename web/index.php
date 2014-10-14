@@ -2,6 +2,7 @@
 require_once __DIR__.'/../bootstrap/bootstrap.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
 
 // Some constant sql queries
 define('COUNT_QUERY', 'SELECT COUNT(*) as count FROM attendees');
