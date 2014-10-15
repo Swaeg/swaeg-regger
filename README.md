@@ -8,6 +8,7 @@ Party-goers registering application
 	* Git clone the repository
 	* Run the command: php composer.phar install
 	* Run the command: ./regger init
+	* Edit config/config.php and set your invitation limit. Example: 'limit' => 100
 	* Point your web server to web/index.php
 
 ## Command line tools
