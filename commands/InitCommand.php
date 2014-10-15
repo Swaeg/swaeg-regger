@@ -20,7 +20,7 @@ class InitCommand extends Knp\Command\Command {
         	$sql = "CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL)";
 		$app['db']->executeQuery($sql);
 		$output->writeln('New database created.');
-		chmod(__DIR__.'/../db/app.db', 0775);
+		chmod(__DIR__.'/../db/app.db', 0777);
 		$output->writeln('== DONE ==');
 	}	
 }

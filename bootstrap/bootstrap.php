@@ -10,7 +10,7 @@ use Knp\Provider\ConsoleServiceProvider;
 $app = new Silex\Application();
 
 // Debug mode
-$app['debug'] = true;
+$app['debug'] = false;
 
 // Register Twig service provider
 $app->register(new Silex\Provider\TwigServiceProvider(),

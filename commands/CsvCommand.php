@@ -20,7 +20,9 @@ class CsvCommand extends Knp\Command\Command {
 		$sql = "SELECT name, email FROM attendees";
 		$app = $this->getSilexApplication();
 		$users = $app['db']->fetchAll($sql);
-		unlink(__DIR__.'/../registered.csv');
+		if (file_exists(__DIR__.'/../registered.csv')) {
+			unlink(__DIR__.'/../registered.csv');
+		}
 		$csv = Writer::createFromFileObject(new SplFileObject(__DIR__.'/../registered.csv', 'a+'), 'w');
 		$csv->setNullHandlingMode(Writer::NULL_AS_EMPTY);
 		$csv->insertOne(['name', 'email']);
