@@ -9,21 +9,35 @@
 			background-color: black;
 			color: white;
 		}
-		h1 { text-align: center; font-style: italic; font-size: 2.3em; }
+		h1 { 
+			text-align: center; 
+			font-style: italic; 
+			font-size: 2.3em; 
+		}
 		#form { text-align: center; }
 		#form-submit { text-align: center; }
-		.registration-form { padding-top: 10em; }
+		.middle-box { padding-top: 10em; }
 		#form_name { margin-left: 0.3em; }
-		#form_email { margin-left: 0.5em; }
+		#form_email { margin-left: 0.4em; }
+		input { 
+			font: 1em 'Archivo Narrow', Helvetica, Arial, sans-serif;
+			margin-top: 0.5em;
+		}
 	</style>
     </head>
     <body>
-    	<div class="registration-form">
+    	<div class="middle-box">
+	{% if form is defined %}
     	<h1>PARTY REGISTRATION</h1>
         <form action="/tuuppaa" method="post">
     		{{ form_widget(form) }}
-		<div id="form-submit"><input type="submit" name="submit" /></div>
+		<div id="form-submit"><input type="submit" name="submit" value="Register" /></div>
 	</form>
+	{% endif %}
+
+	{% if message is defined %}
+	<h1>{{ message }}</h1>
+	{% endif %}
 	</div>
     </body>
 </html>

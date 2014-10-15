@@ -12,7 +12,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class ResetCommand extends Knp\Command\Command {
 	
 	protected function configure() {
-		$this->setName('reset')->setDescription("Resets the application");
+		$this->setName('reset')->setDescription("Resets the database");
 	}
 	
 	protected function execute(InputInterface $input, OutputInterface $output) {

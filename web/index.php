@@ -27,14 +27,14 @@ function getRegisterForm($app) {
 // This route handles the data from the form
 $app->post('/tuuppaa', function (Request $request) use($app) {
 	if(!partyHasRoom($app)) {
-		return "Nope.";
+		return $app['twig']->render('main.twig.html', array('message' => 'No posting for you.'));
 	}
 	$form = getRegisterForm($app);
 	$form->handleRequest($request);
 	if ($form->isValid()) {
 		$data = $form->getData();
 		$app['db']->insert('attendees', array('name' => $data['name'], 'email' => $data['email']));
-		return 'Success!';
+		return $app['twig']->render('main.twig.html', array('message' => 'REGISTRATION OK!'));
 	} else {
 		return $app['twig']->render('main.twig.html', array('form' => $form->createView()));
 	}
@@ -43,7 +43,7 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 // This route is the simple main route, just renders the form
 $app->get('/', function (Request $request) use ($app) {
 	if(!partyHasRoom($app) && $request->getMethod() === 'GET') {
-		return "Registration has closed.";
+		return $app['twig']->render('main.twig.html', array('message' => 'Registration has closed.'));
 	}
 	// Fetch form
 	$form = getRegisterForm($app);
@@ -51,12 +51,6 @@ $app->get('/', function (Request $request) use ($app) {
 
 	return $app['twig']->render('main.twig.html', array('form' => $form->createView()));
 });
-
-/*$app->get('/init-db', function() use($app) {
-	$sql = "CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL)";
-	$app['db']->executeQuery($sql);
-	return "Init db!";
-});*/
 
 $app->run();
 
