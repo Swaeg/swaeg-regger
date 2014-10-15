@@ -28,5 +28,5 @@ Party-goers registering application
 ## FAQ
 
 * The app is not working! I can't register my name or email!
-- Make your web server is configured correctly. More info http://silex.sensiolabs.org/doc/web_servers.html
+Make your web server is configured correctly. More info http://silex.sensiolabs.org/doc/web_servers.html
 		
