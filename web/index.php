@@ -6,6 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 // Some constant sql queries
 define('COUNT_QUERY', 'SELECT COUNT(*) as count FROM attendees');
+define('EMAIL_CHECK', 'SELECT * FROM attendees WHERE email = ?');
 
 function partyHasRoom($app) {
 	$res = $app['db']->fetchAssoc(COUNT_QUERY);
@@ -33,6 +34,10 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 	$form->handleRequest($request);
 	if ($form->isValid()) {
 		$data = $form->getData();
+		$check = $app['db']->fetchAssoc(EMAIL_CHECK, array($data['email']));
+		if($check) {
+			return $app['twig']->render('main.twig.html', array('message' => 'You have already registered!'));
+		}
 		$app['db']->insert('attendees', array('name' => $data['name'], 'email' => $data['email']));
 		return $app['twig']->render('main.twig.html', array('message' => 'REGISTRATION OK!'));
 	} else {
