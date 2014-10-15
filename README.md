@@ -25,4 +25,8 @@ Party-goers registering application
 	* regger csv
 		Dumps the database to a csv-file inthe projects root named 'registered.csv'
 
+## FAQ
 
+* The app is not working! I can't register my name or email!
+- Make your web server is configured correctly. More info http://silex.sensiolabs.org/doc/web_servers.html
+		
