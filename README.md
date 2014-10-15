@@ -19,14 +19,14 @@ Party-goers registering application
 
 	Commands implemented:
 	* regger init   
-		Creates a new database in the /db-folder
+		Creates a new database in the /db-folder. Does create a new one if it exists already -> use reset for this.
 	* regger reset
 		Drops all tables from the database and creates fresh ones.
 	* regger csv
-		Dumps the database to a csv-file inthe projects root named 'registered.csv'
+		Dumps the database to a csv-file in the projects root named 'registered.csv'
 
 ## FAQ
 
 * The app is not working! I can't register my name or email!
-Make your web server is configured correctly. More info http://silex.sensiolabs.org/doc/web_servers.html
+Make sure our web server is configured correctly. More info http://silex.sensiolabs.org/doc/web_servers.html
 		
