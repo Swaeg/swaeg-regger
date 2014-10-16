@@ -28,7 +28,7 @@ function getRegisterForm($app) {
 // This route handles the data from the form
 $app->post('/tuuppaa', function (Request $request) use($app) {
 	if(!partyHasRoom($app)) {
-		return $app['twig']->render('main.twig.html', array('message' => 'No posting for you.'));
+		return $app['twig']->render('main.twig.html', array('message' => $app['msg_posting']));
 	}
 	$form = getRegisterForm($app);
 	$form->handleRequest($request);
@@ -36,10 +36,10 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 		$data = $form->getData();
 		$check = $app['db']->fetchAssoc(EMAIL_CHECK, array($data['email']));
 		if($check) {
-			return $app['twig']->render('main.twig.html', array('message' => 'You have already registered!'));
+			return $app['twig']->render('main.twig.html', array('message' => $app['msg_already_registered']));
 		}
 		$app['db']->insert('attendees', array('name' => $data['name'], 'email' => $data['email']));
-		return $app['twig']->render('main.twig.html', array('message' => 'REGISTRATION OK!'));
+		return $app['twig']->render('main.twig.html', array('message' => $app['msg_registration_ok']));
 	} else {
 		return $app['twig']->render('main.twig.html', array('form' => $form->createView()));
 	}
@@ -48,7 +48,7 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 // This route is the simple main route, just renders the form
 $app->get('/', function (Request $request) use ($app) {
 	if(!partyHasRoom($app) && $request->getMethod() === 'GET') {
-		return $app['twig']->render('main.twig.html', array('message' => 'Registration has closed.'));
+		return $app['twig']->render('main.twig.html', array('message' => $app['msg_registration_closed']));
 	}
 	// Fetch form
 	$form = getRegisterForm($app);
