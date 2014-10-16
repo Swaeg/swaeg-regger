@@ -4,7 +4,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 // Namespaces
 
 use Silex\Provider\FormServiceProvider;
-use Symfony\Component\Validator\Constraints as Assert;
 use Knp\Provider\ConsoleServiceProvider;
 
 $app = new Silex\Application();

@@ -47,7 +47,7 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 
 // This route is the simple main route, just renders the form
 $app->get('/', function (Request $request) use ($app) {
-	if(!partyHasRoom($app) && $request->getMethod() === 'GET') {
+	if(!partyHasRoom($app)) {
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_registration_closed']));
 	}
 	// Fetch form
