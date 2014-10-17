@@ -22,6 +22,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(),
 		'path'     => __DIR__.'/../db/app.db')
 ));
 
+
 $app->register(new FormServiceProvider());
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
@@ -34,5 +35,9 @@ $app->register(new ConsoleServiceProvider(), array(
         'console.project_directory' => __DIR__."/..",
 ));
 
-//$app['asset_path'] = __DIR__."/../web/";
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+	'monolog.logfile' => __DIR__.'/../app.log',
+	'monolog.level' => Monolog\Logger::NOTICE,
+));
+
 return $app;

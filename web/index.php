@@ -28,6 +28,7 @@ function getRegisterForm($app) {
 // This route handles the data from the form
 $app->post('/tuuppaa', function (Request $request) use($app) {
 	if(!partyHasRoom($app)) {
+		$app['monolog']->addWarning(sprintf("Client from ip: %s trying to post when registration is closed!", $request->getClientIp()));
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_posting']));
 	}
 	$form = getRegisterForm($app);
@@ -36,8 +37,10 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 		$data = $form->getData();
 		$check = $app['db']->fetchAssoc(EMAIL_CHECK, array($data['email']));
 		if($check) {
+			$app['monolog']->addWarning(sprintf("User with email %s trying to register again. This is pretty normal behaviour.", $data['email']));
 			return $app['twig']->render('main.twig.html', array('message' => $app['msg_already_registered']));
 		}
+
 		$app['db']->insert('attendees', array('name' => $data['name'], 'email' => $data['email']));
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_registration_ok']));
 	} else {

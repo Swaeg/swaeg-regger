@@ -19,7 +19,7 @@ return array(
 	'msg_registration_closed' => "Registration has closed",
 
 	/* Here you can change the number of attendees. You can change this number whenever you like. */
-	'limit' => 300
+	'limit' => 20
 
 );
 
