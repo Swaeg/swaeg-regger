@@ -3,10 +3,10 @@
 
 set_time_limit(0);
 
-$app = require_once __DIR__ ."/bootstrap/bootstrap.php";
+$app = require_once __DIR__ ."/app/bootstrap.php";
 
 $console = $app["console"];
-$console->add(new \CsvCommand());
-$console->add(new \ResetCommand());
-$console->add(new \InitCommand());
+$console->add(new Commands\CsvCommand());
+$console->add(new Commands\ResetCommand());
+$console->add(new Commands\InitCommand());
 $console->run();

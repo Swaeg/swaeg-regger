@@ -1,6 +1,8 @@
 <?php
 
-use Knp\Command\Command;
+namespace Commands;
+
+use Knp\Command\Command as Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -9,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 
-class InitCommand extends Knp\Command\Command {
+class InitCommand extends Command {
 	
 	protected function configure() {
 		$this->setName('init')->setDescription("Initializes an empty database");
