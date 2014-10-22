@@ -12,17 +12,17 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 
 class InitCommand extends Command {
-	
+
+	const SQL = "CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, mailing_list BOOLEAN)";
+
 	protected function configure() {
 		$this->setName('init')->setDescription("Initializes an empty database");
 	}
 	
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$app = $this->getSilexApplication();
-        	$sql = "CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL)";
-		$app['db']->executeQuery($sql);
+		$app['db']->executeQuery(self::SQL);
 		$output->writeln('New database created.');
-		chmod(__DIR__.'/../db/app.db', 0777);
 		$output->writeln('== DONE ==');
 	}	
 }

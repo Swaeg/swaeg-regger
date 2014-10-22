@@ -5,6 +5,9 @@
 
 return array(
 
+	/* Add a 'mailing list'-checkbox to the form (true or false without quotes)*/
+	'mailing_list' => false,
+
 	/* Some messages returned to the user */
 	/* This error message is displayed when some fancy pants is trying to manually post to our posting url and the registration is closed. */
 	'msg_posting' => "NOPE!",

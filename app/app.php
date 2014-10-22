@@ -19,11 +19,19 @@ function partyHasRoom($app) {
 
 // Form builder function
 function getRegisterForm($app) {
-	return $app['form.factory']->createBuilder()
+	$form = $app['form.factory']->createBuilder()
 		->add('name', 'text', array('constraints' => array(new Assert\NotBlank())))
-		->add('email', 'text', array('constraints' => array(new Assert\Email())))
-		->getForm();
+		->add('email', 'text', array('constraints' => array(new Assert\Email())));
+	// Add extra checkbox if config says so
+	if($app['mailing_list']) { 
+		$form->add('mailing_list', 'checkbox', array('label' => 'Subscribe to newsletter?', 
+			'required' => false));
+	}
+	return $form->getForm();
 }
+$app->get('/tuuppaa', function(Request $request) use($app) {
+	return $app->redirect('/');
+});
 
 // This route handles the data from the form
 $app->post('/tuuppaa', function (Request $request) use($app) {
@@ -40,8 +48,14 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 			$app['monolog']->addWarning(sprintf("User with email %s trying to register again. This is pretty normal behaviour.", $data['email']));
 			return $app['twig']->render('main.twig.html', array('message' => $app['msg_already_registered']));
 		}
-
-		$app['db']->insert('attendees', array('name' => $data['name'], 'email' => $data['email']));
+		if($app['mailing_list']) {
+			if(!$data['mailing_list']) {
+				$data['mailing_list'] = 0;
+			}
+		} else {
+			$data['mailing_list'] = 0;
+		}
+		$app['db']->insert('attendees', array('name' => $data['name'], 'email' => $data['email'], 'mailing_list' => $data['mailing_list']));
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_registration_ok']));
 	} else {
 		return $app['twig']->render('main.twig.html', array('form' => $form->createView()));
