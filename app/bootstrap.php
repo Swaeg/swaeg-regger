@@ -1,6 +1,5 @@
 <?php
-$loader = require_once __DIR__.'/../vendor/autoload.php';
-$loader->add('Swaeg', __DIR__.'/../src/');
+require_once __DIR__.'/../vendor/autoload.php';
 // Namespaces
 
 use Silex\Provider\FormServiceProvider;
@@ -11,10 +10,6 @@ $app = new Silex\Application();
 // Debug mode
 $app['debug'] = false;
 
-// Register Twig service provider
-$app->register(new Silex\Provider\TwigServiceProvider(),
-	array('twig.path' => __DIR__.'/../views',
-));
 // Register Doctrine db abstraction layer
 $app->register(new Silex\Provider\DoctrineServiceProvider(),
 	array('db.options' => array(
@@ -22,7 +17,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(),
 		'path'     => __DIR__.'/../db/app.db')
 ));
 
-
+$app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new FormServiceProvider());
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
@@ -39,5 +34,11 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 	'monolog.logfile' => __DIR__.'/../app.log',
 	'monolog.level' => Monolog\Logger::NOTICE,
 ));
+
+// Register Twig service provider
+$app->register(new Silex\Provider\TwigServiceProvider(),
+	array('twig.path' => __DIR__.'/../views',
+));
+
 
 return $app;
