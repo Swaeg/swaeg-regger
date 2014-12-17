@@ -1,6 +1,6 @@
 <?php
 
-namespace Commands;
+namespace Swaeg\Commands;
 
 use Knp\Command\Command as Command;
 use Symfony\Component\Console\Input\InputDefinition;

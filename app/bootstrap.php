@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
-
+$loader = require_once __DIR__.'/../vendor/autoload.php';
+$loader->add('Swaeg', __DIR__.'/../src/');
 // Namespaces
 
 use Silex\Provider\FormServiceProvider;
