@@ -1,7 +1,9 @@
 swaeg-regger
 ============
 
-Party-goers registering application
+A party attendee registering application for party organizers.
+The app is simple one form app where attendees can register their name and email and optionally to a mailing list.
+Organizers can dump the attendees to a csv-file to use in mailchimp etc. 
 
 ## Installation
 	* Make sure you have php5-sqlite installed on your server (E.g. sudo apt-get install php5-sqlite)
@@ -24,6 +26,10 @@ Party-goers registering application
 		Drops all tables from the database and creates fresh ones.
 	* regger csv
 		Dumps the database to a csv-file in the projects root named 'registered.csv'
+
+## Tests
+
+	Run unit tests with 'phpunit'
 
 ## FAQ
 
