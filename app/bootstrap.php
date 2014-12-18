@@ -4,18 +4,34 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use Silex\Provider\FormServiceProvider;
 use Knp\Provider\ConsoleServiceProvider;
+use Swaeg\Services\FormGeneratorService;
+use Swaeg\Services\ConstraintService;
 
 $app = new Silex\Application();
 
 // Debug mode
 $app['debug'] = false;
 
+// Environment variable
+$app['env'] = isset($_ENV['env']) ? $_ENV['env'] : 'dev';
+
+
 // Register Doctrine db abstraction layer
-$app->register(new Silex\Provider\DoctrineServiceProvider(),
-	array('db.options' => array(
-		'driver'   => 'pdo_sqlite',
-		'path'     => __DIR__.'/../db/app.db')
-));
+if($app['env'] !== 'test') {
+	$app->register(new Silex\Provider\DoctrineServiceProvider(),
+		array('db.options' => array(
+			'driver'   => 'pdo_sqlite',
+			'path'     => __DIR__.'/../db/app.db')
+	));
+} else {
+	// Use in-memory sqlite for testing
+	$app->register(new Silex\Provider\DoctrineServiceProvider(),
+		array('db.options' => array(
+			'driver' => 'pdo_sqlite',
+			'memory' => true)
+	));
+	$app['db']->executeQuery("CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, mailing_list BOOLEAN)");
+}
 
 $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new FormServiceProvider());
@@ -40,5 +56,13 @@ $app->register(new Silex\Provider\TwigServiceProvider(),
 	array('twig.path' => __DIR__.'/../views',
 ));
 
+// Swaeg form generator service
+$app['form_generator'] = $app->share(function() {
+	return new FormGeneratorService();
+});
+// Constraints service
+$app['constraints'] = $app->share(function() {
+	return new ConstraintService();
+});
 
 return $app;

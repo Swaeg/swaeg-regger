@@ -18,4 +18,8 @@ class WebTestCase extends BaseWebTestCase {
 		return $_SERVER['APP_DIR'];
 	}
 
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 }
