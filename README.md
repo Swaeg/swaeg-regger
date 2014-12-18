@@ -1,7 +1,7 @@
 swaeg-regger
 ============
 
-[!(license)(http://img.shields.io/badge/license-MIT-green.svg?style=flat-square)]
+[!(license)(http://img.shields.io/badge/license-MIT-green.svg?style=flat-square)]()
 
 A party attendee registering application for party organizers.
 The app is simple one form app where attendees can register their name and email and optionally register to a mailing list.
