@@ -1,8 +1,10 @@
 swaeg-regger
 ============
 
+[!(license)(http://img.shields.io/badge/license-MIT-green.svg?style=flat-square)]
+
 A party attendee registering application for party organizers.
-The app is simple one form app where attendees can register their name and email and optionally to a mailing list.
+The app is simple one form app where attendees can register their name and email and optionally register to a mailing list.
 Organizers can dump the attendees to a csv-file to use in mailchimp etc. 
 
 ## Installation
@@ -11,7 +13,7 @@ Organizers can dump the attendees to a csv-file to use in mailchimp etc.
 	* Run the command: php composer.phar install
 	* Run the command: ./regger init
 	* Make sure your web server can read and write the /db/-directory and the newly created app.db
-	* Edit config/config.php and set your invitation limit. Example: 'limit' => 100
+	* Edit config/config.php and set your invitation limit and other options.
 	* Point your web server to web/index.php
 
 ## Command line tools
