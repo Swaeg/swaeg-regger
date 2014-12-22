@@ -13,15 +13,13 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class InitCommand extends Command {
 
-	const SQL = "CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, mailing_list BOOLEAN)";
-
 	protected function configure() {
 		$this->setName('init')->setDescription("Initializes an empty database");
 	}
 	
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$app = $this->getSilexApplication();
-		$app['db']->executeQuery(self::SQL);
+		$app['db_service']->initializeDatabase();
 		$output->writeln('New database created.');
 		$output->writeln('== DONE ==');
 	}	
