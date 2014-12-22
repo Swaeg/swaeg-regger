@@ -22,11 +22,11 @@ class CsvCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$output->writeln("Dumping sql to csv-file");
 		$app = $this->getSilexApplication();
-		$users = $app['db']->fetchAll(self::SQL);
-		if (file_exists(__DIR__.'/../../registered.csv')) {
-			unlink(__DIR__.'/../../registered.csv');
+		$users = $app['db_service']->fetchAllAttendees();
+		if (file_exists(__DIR__.'/../../../registered.csv')) {
+			unlink(__DIR__.'/../../../registered.csv');
 		}
-		$csv = Writer::createFromFileObject(new \SplFileObject(__DIR__.'/../../registered.csv', 'a+'), 'w');
+		$csv = Writer::createFromFileObject(new \SplFileObject(__DIR__.'/../../../registered.csv', 'a+'), 'w');
 		$csv->setNullHandlingMode(Writer::NULL_AS_EMPTY);
 		$csv->insertOne(['name', 'email', 'mailing_list']);
 		$csv->insertAll($users);

@@ -6,6 +6,7 @@ use Silex\Provider\FormServiceProvider;
 use Knp\Provider\ConsoleServiceProvider;
 use Swaeg\Services\FormGeneratorService;
 use Swaeg\Services\ConstraintService;
+use Swaeg\Services\DatabaseService;
 
 $app = new Silex\Application();
 
@@ -30,7 +31,6 @@ if($app['env'] !== 'test') {
 			'driver' => 'pdo_sqlite',
 			'memory' => true)
 	));
-	$app['db']->executeQuery("CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, mailing_list BOOLEAN)");
 }
 
 $app->register(new Silex\Provider\SessionServiceProvider());
@@ -57,12 +57,21 @@ $app->register(new Silex\Provider\TwigServiceProvider(),
 ));
 
 // Swaeg form generator service
-$app['form_generator'] = $app->share(function() {
-	return new FormGeneratorService();
+$app['form_generator'] = $app->share(function() use($app) {
+	return new FormGeneratorService($app);
 });
 // Constraints service
-$app['constraints'] = $app->share(function() {
-	return new ConstraintService();
+$app['constraints'] = $app->share(function() use($app) {
+	return new ConstraintService($app);
 });
+// DB queries etc.
+$app['db_service'] = $app->share(function() use($app) {
+	return new DatabaseService($app);
+});
+
+// Init database if we use a in-memory sqlite db for testing
+if($app['env'] === 'test') { 
+	$app['db_service']->initializeDatabase();
+}
 
 return $app;

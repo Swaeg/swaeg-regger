@@ -24,11 +24,9 @@ class ResetCommand extends Command {
 	    		return;
 		}
 		$app = $this->getSilexApplication();
-		$deleteSql = "DROP TABLE IF EXISTS attendees";
-		$app['db']->executeQuery($deleteSql);
+		$app['db_service']->dropDatabase();
 		$output->writeln('Old database dropped.');
-		$createSql = "CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL)";
-		$app['db']->executeQuery($createSql);
+		$app['db_service']->initializeDatabase();
 		$output->writeln('New database created.');
 		$output->writeln('== DONE ==');
 	}	

@@ -9,16 +9,15 @@ $app->get('/tuuppaa', function(Request $request) use($app) {
 
 // This route handles the data from the form
 $app->post('/tuuppaa', function (Request $request) use($app) {
-	if(!$app['constraints']->partyHasRoom($app)) {
+	if(!$app['constraints']->partyHasRoom()) {
 		$app['monolog']->addWarning(sprintf("Client from ip: %s trying to post when registration is closed!", $request->getClientIp()));
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_posting']));
 	}
-	$form = $app['form_generator']->getRegisterForm($app);
+	$form = $app['form_generator']->getRegisterForm();
 	$form->handleRequest($request);
 	if ($form->isValid()) {
 		$data = $form->getData();
-		//$check = $app['db']->fetchAssoc(EMAIL_CHECK, array($data['email']));
-		$check = $app['constraints']->hasRegistered($app, $data['email']);
+		$check = $app['constraints']->hasRegistered($data['email']);
 		if($check) {
 			$app['monolog']->addWarning(sprintf("User with email %s trying to register again. This is pretty normal behaviour.", $data['email']));
 			return $app['twig']->render('main.twig.html', array('message' => $app['msg_already_registered']));
@@ -30,7 +29,7 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 		} else {
 			$data['mailing_list'] = 0;
 		}
-		$app['db']->insert('attendees', array('name' => $data['name'], 'email' => $data['email'], 'mailing_list' => $data['mailing_list']));
+		$app['db_service']->insertAttendee($data);
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_registration_ok']));
 	} else {
 		return $app['twig']->render('main.twig.html', array('form' => $form->createView()));
@@ -39,17 +38,16 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 
 // This route is the simple main route, just renders the form
 $app->get('/', function (Request $request) use ($app) {
-	if(!$app['constraints']->partyHasRoom($app)) {
+	if(!$app['constraints']->partyHasRoom()) {
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_registration_closed']));
 	}
 	// Fetch form
-	$form = $app['form_generator']->getRegisterForm($app);
+	$form = $app['form_generator']->getRegisterForm();
 	$form->handleRequest($request);
 
 	return $app['twig']->render('main.twig.html', array('form' => $form->createView()));
 });
 
-//$app->run();
 return $app;
 
 // vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent

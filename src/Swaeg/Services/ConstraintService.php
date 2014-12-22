@@ -2,24 +2,19 @@
 
 namespace Swaeg\Services;
 
-use Silex\Application;
+class ConstraintService extends SwaegBaseService {
 
-class ConstraintService {
-
-	protected static $COUNT_QUERY = 'SELECT COUNT(*) as count FROM attendees';
-	protected static $EMAIL_CHECK = 'SELECT * FROM attendees WHERE email = ?';
-
-	public function partyHasRoom(Application $app) {
-		$res = $app['db']->fetchAssoc(self::$COUNT_QUERY);
-		if($res['count'] >= $app['limit']) {
+	public function partyHasRoom() {
+		$res = $this->getSilexApplication()['db_service']->countAttendees();
+		if($res['count'] >= $this->getSilexApplication()['limit']) {
 			return false;
 		} else {
 			return true;
 		}
 	}
 
-	public function hasRegistered(Application $app, $email) {
-		$check = $app['db']->fetchAssoc(self::$EMAIL_CHECK, array($email));
+	public function hasRegistered($email) {
+		$check = $this->getSilexApplication()['db_service']->checkEmail($email);
 		if($check) {
 			return true;
 		} else {
