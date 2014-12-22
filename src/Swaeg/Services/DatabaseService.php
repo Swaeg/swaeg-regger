@@ -2,10 +2,12 @@
 
 namespace Swaeg\Services;
 
+use Swaeg\Interfaces\DatabaseInterface;
+
 /**
  * DatabaseService class handles all database related queries.
  */
-class DatabaseService extends SwaegBaseService {
+class DatabaseService extends SwaegBaseService implements DatabaseInterface {
 
 	protected static $INIT_QUERY = "CREATE TABLE IF NOT EXISTS attendees(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, email TEXT NOT NULL, mailing_list BOOLEAN, created_at TIMESTAMP DEFAULT (datetime('now','localtime')))";
 	protected static $DROP_QUERY = "DROP TABLE IF EXISTS attendees";
