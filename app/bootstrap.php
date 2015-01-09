@@ -7,11 +7,12 @@ use Knp\Provider\ConsoleServiceProvider;
 use Swaeg\Services\FormGeneratorService;
 use Swaeg\Services\ConstraintService;
 use Swaeg\Services\DatabaseService;
+use Swaeg\Services\MailService;
 
 $app = new Silex\Application();
 
 // Debug mode
-$app['debug'] = false;
+$app['debug'] = true;
 
 // Environment variable
 $app['env'] = isset($_ENV['env']) ? $_ENV['env'] : 'dev';
@@ -55,6 +56,17 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 $app->register(new Silex\Provider\TwigServiceProvider(),
 	array('twig.path' => __DIR__.'/../views',
 ));
+// Swiftmailer
+$app->register(new Silex\Provider\SwiftmailerServiceProvider());
+
+$app['swiftmailer.options'] = array(
+	'host' => $app['mail_host'],
+	'port' => $app['mail_port'],
+	'username' => $app['mail_username'],
+	'password' => $app['mail_password'],
+	'encryption' => $app['mail_encryption'],
+	'auth_mode' => $app['mail_auth_mode']
+);
 
 // Swaeg form generator service
 $app['form_generator'] = $app->share(function() use($app) {
@@ -67,6 +79,10 @@ $app['constraints'] = $app->share(function() use($app) {
 // DB queries etc.
 $app['db_service'] = $app->share(function() use($app) {
 	return new DatabaseService($app);
+});
+// Swaeg mail service
+$app['mail_service'] = $app->share(function() use($app) {
+	return new MailService($app);
 });
 
 // Init database if we use a in-memory sqlite db for testing

@@ -3,12 +3,12 @@ require __DIR__.'/bootstrap.php';
 
 use Symfony\Component\HttpFoundation\Request;
 
-$app->get('/tuuppaa', function(Request $request) use($app) {
+$app->get('/push', function(Request $request) use($app) {
 	return $app->redirect('/');
 });
 
 // This route handles the data from the form
-$app->post('/tuuppaa', function (Request $request) use($app) {
+$app->post('/push', function (Request $request) use($app) {
 	if(!$app['constraints']->partyHasRoom()) {
 		$app['monolog']->addWarning(sprintf("Client from ip: %s trying to post when registration is closed!", $request->getClientIp()));
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_posting']));
@@ -30,6 +30,7 @@ $app->post('/tuuppaa', function (Request $request) use($app) {
 			$data['mailing_list'] = 0;
 		}
 		$app['db_service']->insertAttendee($data);
+		$app['mail_service']->sendConfirmationMail($data);
 		return $app['twig']->render('main.twig.html', array('message' => $app['msg_registration_ok']));
 	} else {
 		return $app['twig']->render('main.twig.html', array('form' => $form->createView()));
